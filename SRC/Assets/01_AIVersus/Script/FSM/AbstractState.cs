@@ -59,6 +59,7 @@ namespace FSM
 		}
 		private void SwitchState(AbstractState NextState)
 		{
+			CurrentState.ExitState();
 			CurrentState = NextState;
 			CurrentState.EnterState(_target);
 		}
@@ -81,8 +82,8 @@ namespace FSM
 
 	public class DefaultState : AbstractState
 	{
-		private VarSpace _space;
-		private AIVersusFSM _target;
+		protected VarSpace _space;
+		protected AIVersusFSM _target;
 
 		public override void Init(VarSpace Space)
 		{
@@ -108,6 +109,43 @@ namespace FSM
 
 	public class Run : DefaultState
 	{
+		public Vector2 Speed;
 
+
+		private Vector2 _safePosition;
+
+		public override void EnterState(AIVersusFSM Entity)
+		{
+			base.EnterState(Entity);
+			CalculNextSafePosition();
+			//_space.MapOfVars["InMotion"] = true as Object;
+		}
+
+		public override void Tick(float Deltatime)
+		{
+			base.Tick(Deltatime);
+			var posPlayer = new Vector2(_target.transform.position.x, _target.transform.position.z);
+			Vector2 vecDistance = _safePosition - posPlayer;
+			Vector2 dirNormalize = vecDistance.normalized;
+			Vector2 deltaMove = new Vector2(dirNormalize.x * Speed.x * Deltatime, dirNormalize.y * Speed.y * Deltatime);
+
+			if (vecDistance.sqrMagnitude <= deltaMove.sqrMagnitude)
+			{
+				FinishMove();
+			}
+
+		}
+
+		private void CalculNextSafePosition()
+		{
+			_safePosition = Vector2.zero;
+		}
+
+
+		private void FinishMove()
+		{
+			//_space.MapOfVars["InMotion"] = false;
+			_target.transform.position = new Vector3(_safePosition.x, _target.transform.position.y, _safePosition.y);
+		}
 	}
 }
