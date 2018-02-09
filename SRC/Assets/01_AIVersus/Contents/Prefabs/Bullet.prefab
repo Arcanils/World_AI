@@ -53,7 +53,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DurationBeforeDeath: 6
-  Speed: {x: 5, y: 5}
+  Speed: {x: 10, y: 10}
 --- !u!212 &212226420496609072
 SpriteRenderer:
   m_ObjectHideFlags: 1

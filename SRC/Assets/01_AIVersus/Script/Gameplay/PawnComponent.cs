@@ -11,6 +11,8 @@ public class PawnComponent : MonoBehaviour {
 	private float FireRate;
 	[SerializeField]
 	private int NAmmos;
+	[SerializeField]
+	private float ReloadDuration;
 
 	public bool IsShooting { get; private set; }
 	public bool IsReloading { get; private set; }
@@ -22,6 +24,7 @@ public class PawnComponent : MonoBehaviour {
 	public float NAmmoLeft { get; private set; }
 
 	private float _cooldownShoot;
+	private Coroutine _routineReload;
 
 	private void Start()
 	{
@@ -58,7 +61,23 @@ public class PawnComponent : MonoBehaviour {
 
 	public void StartReload()
 	{
-
+		IsReloading = true;
+		if (_routineReload != null)
+		{
+			Debug.LogError("RoutineReload not finished and restarted ?");
+			StopCoroutine(_routineReload);
+			_routineReload = null;
+		}
+		_routineReload = StartCoroutine(ReloadingEnum());
+	}
+	public void StopReload()
+	{
+		IsReloading = false;
+		if (_routineReload != null)
+		{
+			StopCoroutine(_routineReload);
+			_routineReload = null;
+		}
 	}
 
 	public void Shield()
@@ -83,5 +102,15 @@ public class PawnComponent : MonoBehaviour {
 
 			yield return waitValue;
 		}
+	}
+
+
+	private IEnumerator ReloadingEnum()
+	{
+		IsReloading = true;
+		yield return new WaitForSeconds(ReloadDuration);
+		NAmmoLeft = NAmmos;
+		IsReloading = false;
+		_routineReload = null;
 	}
 }

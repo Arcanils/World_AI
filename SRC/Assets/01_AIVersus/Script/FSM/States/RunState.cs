@@ -15,6 +15,11 @@ namespace FSM
 		{
 			this.Speed = Speed;
 		}
+		public override void Init(LocalSpace Space)
+		{
+			base.Init(Space);
+			_space.BoolVars["InMotion"] = false;
+		}
 
 		public override void EnterState(PawnComponent Entity)
 		{

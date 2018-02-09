@@ -221,8 +221,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PrefabToShoot: {fileID: 1136838425365748, guid: f3f630bae765a924585828ddbf983545,
     type: 2}
-  FireRate: 0.5
+  FireRate: 0.2
   NAmmos: 10
+  ReloadDuration: 3
 --- !u!212 &369584116
 SpriteRenderer:
   m_ObjectHideFlags: 0

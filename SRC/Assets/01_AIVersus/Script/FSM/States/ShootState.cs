@@ -4,13 +4,19 @@ using UnityEngine;
 
 namespace FSM
 {
-	public class Shoot : DefaultState
+	public class ShootState : DefaultState
 	{
 		private Vector3 _direction;
 
-		public Shoot(float DurationToWait) : base(DurationToWait)
+		public ShootState(float DurationToWait) : base(DurationToWait)
 		{
 
+		}
+		public override void Init(LocalSpace Space)
+		{
+			base.Init(Space);
+			_space.BoolVars["IsShooting"] = false;
+			_space.BoolVars["OutOfAmmos"] = false;
 		}
 		public override void EnterState(PawnComponent Entity)
 		{

@@ -11,7 +11,7 @@ namespace FSM
 
 		public void Start()
 		{
-			AI = FSMStatic.FakeTestRandomMoveShoot();
+			AI = FSMStatic.FakeTestRandomMoveShootAndReload();
 			AI.Init(Pawn);
 		}
 

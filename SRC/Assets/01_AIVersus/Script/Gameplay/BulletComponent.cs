@@ -18,8 +18,6 @@ public class BulletComponent : MonoBehaviour {
 	{
 		_direction.x = Speed.x * Direction.x * Time.fixedDeltaTime;
 		_direction.y = Speed.y * Direction.y * Time.fixedDeltaTime;
-
-		Debug.Log(_direction);
 	}
 
 	void FixedUpdate ()
