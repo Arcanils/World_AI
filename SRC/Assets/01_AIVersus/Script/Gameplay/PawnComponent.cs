@@ -14,6 +14,7 @@ public class PawnComponent : MonoBehaviour {
 	[SerializeField]
 	private float ReloadDuration;
 
+
 	public bool IsShooting { get; private set; }
 	public bool IsReloading { get; private set; }
 	public bool IsMoving { get; private set; }
@@ -61,6 +62,9 @@ public class PawnComponent : MonoBehaviour {
 
 	public void StartReload()
 	{
+		if (IsReloading)
+			return;
+
 		IsReloading = true;
 		if (_routineReload != null)
 		{
@@ -112,5 +116,10 @@ public class PawnComponent : MonoBehaviour {
 		NAmmoLeft = NAmmos;
 		IsReloading = false;
 		_routineReload = null;
+	}
+
+	private void OnCollisionEnter2D(Collision2D collision)
+	{
+		//MainGameManager.Instance.
 	}
 }
