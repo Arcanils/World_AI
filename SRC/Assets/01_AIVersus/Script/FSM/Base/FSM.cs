@@ -22,11 +22,19 @@ namespace FSM
 			this.CurrentState = CurrentState;
 		}
 
+		public static void LinksAndInit(PawnComponent TargetFSM, params FSM[] FSMs)
+		{
+			LocalSpace space = new LocalSpace();
+			for (int i = 0; i < FSMs.Length; i++)
+			{
+				FSMs[i].Init(TargetFSM, space);
+			}
+		}
 
-		public void Init(PawnComponent Target)
+		public void Init(PawnComponent Target, LocalSpace NewSpace)
 		{
 			_target = Target;
-			_space = new LocalSpace();
+			_space = NewSpace ?? new LocalSpace();
 			for (int i = ListOfStates.Count - 1; i >= 0; --i)
 			{
 				ListOfStates[i].Init(_space);

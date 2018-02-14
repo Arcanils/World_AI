@@ -6,26 +6,30 @@ namespace FSM
 {
 	public class ReloadState : DefaultState
 	{
-		public ReloadState(float DurationMinimal) : base(DurationMinimal)
-		{
+		public float DurationReload;
 
+		private float _timeLeftBeforeReloadingComplete;
+
+		public ReloadState(float DurationReload, float DurationMinimal) : base(DurationMinimal)
+		{
+			this.DurationReload = DurationReload;
 		}
 		public override void Init(LocalSpace Space)
 		{
 			base.Init(Space);
+			_space.BoolVars["InputReload"] = false;
 			_space.BoolVars["IsReloading"] = false;
 			_space.BoolVars["OutOfAmmos"] = false;
 		}
 		public override void EnterState(PawnComponent Entity)
 		{
 			base.EnterState(Entity);
+			_timeLeftBeforeReloadingComplete = DurationReload;
 			_space.BoolVars["IsReloading"] = true;
-			_target.StartReload();
 		}
 
 		public override void ExitState()
 		{
-			_target.StopReload();
 			base.ExitState();
 			_space.BoolVars["IsReloading"] = false;
 		}
@@ -33,7 +37,8 @@ namespace FSM
 		public override void Tick(float Deltatime)
 		{
 			base.Tick(Deltatime);
-			if (!_target.IsReloading)
+			_timeLeftBeforeReloadingComplete -= Deltatime;
+			if (_timeLeftBeforeReloadingComplete < 0)
 				EndState();
 		}
 
@@ -41,6 +46,7 @@ namespace FSM
 		{
 			_space.BoolVars["IsReloading"] = false;
 			_space.BoolVars["OutOfAmmos"] = false;
+			_target.ReloadAmmo();
 		}
 	}
 

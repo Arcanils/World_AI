@@ -35,7 +35,7 @@ namespace FSM
 			var ListOfStates = new List<DefaultState>()
 				{
 					new RunState(Vector2.one * 1f, 0f),
-					new ShootState(2f)
+					new ShootState(0.2f, 2f)
 				};
 
 			var MapOfTransitions = new Dictionary<AbstractState, List<ConditionTransitionState>>()
@@ -66,8 +66,8 @@ namespace FSM
 			var ListOfStates = new List<DefaultState>()
 				{
 					new RunState(Vector2.one * 1f, 0f),
-					new ShootState(2f),
-					new ReloadState(0f),
+					new ShootState(0.2f, 2f),
+					//new ReloadState(0f),
 				};
 
 			var MapOfTransitions = new Dictionary<AbstractState, List<ConditionTransitionState>>()

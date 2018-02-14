@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour
 				_pawn.Shoot(Vector3.up);
 			else if (Input.GetButton("Reload"))
 			{
-				_pawn.StartReload();
+				//_pawn.StartReload();
 			}
 		}
 		else

@@ -18,6 +18,7 @@ namespace FSM
 		public override void Init(LocalSpace Space)
 		{
 			base.Init(Space);
+			_space.FloatVars["InputMoveX"] = 0f;
 			_space.BoolVars["InMotion"] = false;
 		}
 

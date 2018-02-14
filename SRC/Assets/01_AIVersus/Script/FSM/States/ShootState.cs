@@ -6,9 +6,10 @@ namespace FSM
 {
 	public class ShootState : DefaultState
 	{
+		private float _durationBeforeShoot;
 		private Vector3 _direction;
 
-		public ShootState(float DurationToWait) : base(DurationToWait)
+		public ShootState(float FireRate, float DurationToWait) : base(DurationToWait)
 		{
 
 		}
@@ -17,11 +18,11 @@ namespace FSM
 			base.Init(Space);
 			_space.BoolVars["IsShooting"] = false;
 			_space.BoolVars["OutOfAmmos"] = false;
+			_durationBeforeShoot = 0f;
 		}
 		public override void EnterState(PawnComponent Entity)
 		{
 			base.EnterState(Entity);
-			_space.BoolVars["IsShooting"] = true;
 			_space.BoolVars["OutOfAmmos"] = false;
 			GetTarget();
 		}
@@ -35,13 +36,21 @@ namespace FSM
 		public override void Tick(float Deltatime)
 		{
 			base.Tick(Deltatime);
-			if (_target.NAmmoLeft > 0)
+			if (_durationBeforeShoot < 0f)
 			{
-				_target.Shoot(_direction);
+				if (_target.NAmmoLeft > 0)
+				{
+					_target.Shoot(_direction);
+				}
+				else
+				{
+					OutOfAmmos();
+				}
 			}
 			else
 			{
-				OutOfAmmos();
+				_durationBeforeShoot -= Deltatime;
+				_space.BoolVars["IsShooting"] = _durationBeforeShoot > 0f;
 			}
 		}
 
