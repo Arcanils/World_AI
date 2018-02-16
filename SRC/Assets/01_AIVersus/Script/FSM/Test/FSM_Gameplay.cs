@@ -9,8 +9,8 @@ namespace FSM
 		public static void CreateFSMGameplay(out FSM Reload, out FSM Move, out FSM Shoot)
 		{
 			Reload = CreateFSMReload();
-			Move = CreateFSMMovement();
-			Shoot = CreateFSMShoot();
+			Move = CreateFSMReload(); //CreateFSMMovement();
+			Shoot = CreateFSMReload(); //CreateFSMShoot();
 		}
 
 
@@ -22,34 +22,42 @@ namespace FSM
 					new ReloadState(3f, 0.5f),
 				};
 
-			var MapOfTransitions = new Dictionary<AbstractState, List<ConditionTransitionState>>()
+			var MapOfTransitions = new Dictionary<AbstractState, List<TransitionStateInfo>>()
 				{
 					{
-						ListOfStates[0], new List<ConditionTransitionState>()
+						ListOfStates[0], new List<TransitionStateInfo>()
 						{
-							new ConditionTransitionState(ListOfStates[1], null, null, null, new List<KeyValuePair<string, bool>>()
-							{
-								new KeyValuePair<string, bool>( "InMotion", false ),
-								new KeyValuePair<string, bool>( "IsShooting", false ),
-								new KeyValuePair<string, bool>( "InputReload", true ),
-							}),
+							new TransitionStateInfo(ListOfStates[1], new TransitionConditions(
+								new List<Condition<bool>>()
+								{
+									new Condition<bool>("InMotion", false, Condition<bool>.EConditionOperator.EQUAL),
+									new Condition<bool>("IsShooting", false, Condition<bool>.EConditionOperator.EQUAL),
+									new Condition<bool>("InputReload", false, Condition<bool>.EConditionOperator.EQUAL),
+								}
+							)),
 						}
 					},
 					{
-						ListOfStates[1], new List<ConditionTransitionState>()
+						ListOfStates[1], new List<TransitionStateInfo>()
 						{
-							new ConditionTransitionState(ListOfStates[0], null, null, null,  new List<KeyValuePair<string, bool>>()
-							{
-								new KeyValuePair<string, bool>( "IsReloading", false )
-							}),
-							new ConditionTransitionState(ListOfStates[0], null, null, null,  new List<KeyValuePair<string, bool>>()
-							{
-								new KeyValuePair<string, bool>( "InMotion", true )
-							}),
-							new ConditionTransitionState(ListOfStates[0], null, null, null,  new List<KeyValuePair<string, bool>>()
-							{
-								new KeyValuePair<string, bool>( "IsShooting", true )
-							}),
+							new TransitionStateInfo(ListOfStates[0], new TransitionConditions(
+								new List<Condition<bool>>()
+								{
+									new Condition<bool>("IsReloading", false, Condition<bool>.EConditionOperator.EQUAL),
+								}
+							)),
+							new TransitionStateInfo(ListOfStates[0], new TransitionConditions(
+								new List<Condition<bool>>()
+								{
+									new Condition<bool>("InMotion", true, Condition<bool>.EConditionOperator.EQUAL),
+								}
+							)),
+							new TransitionStateInfo(ListOfStates[0], new TransitionConditions(
+								new List<Condition<bool>>()
+								{
+									new Condition<bool>("IsShooting", true, Condition<bool>.EConditionOperator.EQUAL),
+								}
+							)),
 						}
 					}
 				};
@@ -57,7 +65,7 @@ namespace FSM
 
 			return new FSM(ListOfStates, MapOfTransitions, CurrentState);
 		}
-
+		/*
 		public static FSM CreateFSMMovement()
 		{
 			var ListOfStates = new List<DefaultState>()
@@ -66,25 +74,25 @@ namespace FSM
 					new RunState(Vector2.one),
 				};
 
-			var MapOfTransitions = new Dictionary<AbstractState, List<ConditionTransitionState>>()
+			var MapOfTransitions = new Dictionary<AbstractState, List<TransitionStateInfo>>()
 				{
 					{
-						ListOfStates[0], new List<ConditionTransitionState>()
+						ListOfStates[0], new List<TransitionStateInfo>()
 						{
-							new ConditionTransitionState(ListOfStates[1], null, new List<KeyValuePair<string, float>>()
+							new TransitionStateInfo(ListOfStates[1], null, new List<KeyValuePair<string, float>>()
 							{
 								new KeyValuePair<string, float>( "InputMoveX", 1f),
 							}, null, null),
-							new ConditionTransitionState(ListOfStates[1], null, new List<KeyValuePair<string, float>>()
+							new TransitionStateInfo(ListOfStates[1], null, new List<KeyValuePair<string, float>>()
 							{
 								new KeyValuePair<string, float>( "InputMoveX", -1f),
 							}, null, null)
 						}
 					},
 					{
-						ListOfStates[1], new List<ConditionTransitionState>()
+						ListOfStates[1], new List<TransitionStateInfo>()
 						{
-							new ConditionTransitionState(ListOfStates[1], null, new List<KeyValuePair<string, float>>()
+							new TransitionStateInfo(ListOfStates[1], null, new List<KeyValuePair<string, float>>()
 							{
 								new KeyValuePair<string, float>( "InputMoveX", 0f),
 							}, null, null),
@@ -104,26 +112,26 @@ namespace FSM
 					new ShootState(0.2f, 0f),
 				};
 
-			var MapOfTransitions = new Dictionary<AbstractState, List<ConditionTransitionState>>()
+			var MapOfTransitions = new Dictionary<AbstractState, List<TransitionStateInfo>>()
 				{
 					{
-						ListOfStates[0], new List<ConditionTransitionState>()
+						ListOfStates[0], new List<TransitionStateInfo>()
 						{
-							new ConditionTransitionState(ListOfStates[1], null, null, null, new List<KeyValuePair<string, bool>>()
+							new TransitionStateInfo(ListOfStates[1], null, null, null, new List<KeyValuePair<string, bool>>()
 							{
 								new KeyValuePair<string, bool>( "InputShoot", true ),
 							}),
 						}
 					},
 					{
-						ListOfStates[0], new List<ConditionTransitionState>()
+						ListOfStates[0], new List<TransitionStateInfo>()
 						{
-							new ConditionTransitionState(ListOfStates[1], null, null, null, new List<KeyValuePair<string, bool>>()
+							new TransitionStateInfo(ListOfStates[1], null, null, null, new List<KeyValuePair<string, bool>>()
 							{
 								new KeyValuePair<string, bool>( "Shooting", false),
 								new KeyValuePair<string, bool>( "InputShoot", false),
 							}),
-							new ConditionTransitionState(ListOfStates[1], null, null, null, new List<KeyValuePair<string, bool>>()
+							new TransitionStateInfo(ListOfStates[1], null, null, null, new List<KeyValuePair<string, bool>>()
 							{
 								new KeyValuePair<string, bool>( "OutOfAmmos", true),
 								new KeyValuePair<string, bool>( "Shooting", false),
@@ -135,5 +143,6 @@ namespace FSM
 
 			return new FSM(ListOfStates, MapOfTransitions, CurrentState);
 		}
+		*/
 	}
 }

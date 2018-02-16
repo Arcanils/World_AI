@@ -6,29 +6,30 @@ namespace FSM
 {
 	public class LocalSpace
 	{
-		public Dictionary<string, string> StringVars;
+		public Dictionary<string, bool> BoolVars;
 		public Dictionary<string, float> FloatVars;
 		public Dictionary<string, int> IntVars;
-		public Dictionary<string, bool> BoolVars;
+		public Dictionary<string, string> StringVars;
 
 		public LocalSpace()
 		{
-			StringVars = new Dictionary<string, string>();
+			BoolVars = new Dictionary<string, bool>();
 			FloatVars = new Dictionary<string, float>();
 			IntVars = new Dictionary<string, int>();
-			BoolVars = new Dictionary<string, bool>();
+			StringVars = new Dictionary<string, string>();
 		}
 
-		public bool MatchThisVars(ConditionTransitionState Conditions)
+		public bool MatchThisVars(TransitionConditions Conditions)
 		{
-			if (Conditions.StringConditions != null)
+
+			if (Conditions.BoolConditions != null)
 			{
-				var conditions = Conditions.StringConditions;
+				var conditions = Conditions.BoolConditions;
 				string key;
 				for (int i = conditions.Count - 1; i >= 0; --i)
 				{
 					key = conditions[i].Key;
-					if (!StringVars.ContainsKey(key) || StringVars[key] != conditions[i].Value)
+					if (!BoolVars.ContainsKey(key) || !conditions[i].IsValide(BoolVars[key]))
 						return false;
 				}
 			}
@@ -40,7 +41,7 @@ namespace FSM
 				for (int i = conditions.Count - 1; i >= 0; --i)
 				{
 					key = conditions[i].Key;
-					if (!FloatVars.ContainsKey(key) || FloatVars[key] != conditions[i].Value)
+					if (!FloatVars.ContainsKey(key) || !conditions[i].IsValide(FloatVars[key]))
 						return false;
 				}
 			}
@@ -52,19 +53,18 @@ namespace FSM
 				for (int i = conditions.Count - 1; i >= 0; --i)
 				{
 					key = conditions[i].Key;
-					if (!IntVars.ContainsKey(key) || IntVars[key] != conditions[i].Value)
+					if (!IntVars.ContainsKey(key) || !conditions[i].IsValide(IntVars[key]))
 						return false;
 				}
 			}
-
-			if (Conditions.BoolConditions != null)
+			if (Conditions.StringConditions != null)
 			{
-				var conditions = Conditions.BoolConditions;
+				var conditions = Conditions.StringConditions;
 				string key;
 				for (int i = conditions.Count - 1; i >= 0; --i)
 				{
 					key = conditions[i].Key;
-					if (!BoolVars.ContainsKey(key) || BoolVars[key] != conditions[i].Value)
+					if (!StringVars.ContainsKey(key) || !conditions[i].IsValide(StringVars[key]))
 						return false;
 				}
 			}

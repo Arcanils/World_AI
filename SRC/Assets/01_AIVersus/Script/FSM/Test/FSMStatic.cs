@@ -5,7 +5,7 @@ using UnityEngine;
 namespace FSM
 {
 	public static class FSMStatic
-	{
+	{/*
 		public static FSM FakeTestRandomMove()
 		{
 			var ListOfStates = new List<DefaultState>()
@@ -13,12 +13,12 @@ namespace FSM
 					new RunState(Vector2.one * 1f, 3f)
 				};
 
-			var MapOfTransitions = new Dictionary<AbstractState, List<ConditionTransitionState>>()
+			var MapOfTransitions = new Dictionary<AbstractState, List<TransitionStateInfo>>()
 				{
 					{
-						ListOfStates[0], new List<ConditionTransitionState>()
+						ListOfStates[0], new List<TransitionStateInfo>()
 						{
-							new ConditionTransitionState(ListOfStates[0], null, null, null, new List<KeyValuePair<string, bool>>()
+							new TransitionStateInfo(ListOfStates[0], null, null, null, new List<KeyValuePair<string, bool>>()
 							{
 								new KeyValuePair<string, bool>( "InMotion", false )
 							})
@@ -38,21 +38,21 @@ namespace FSM
 					new ShootState(0.2f, 2f)
 				};
 
-			var MapOfTransitions = new Dictionary<AbstractState, List<ConditionTransitionState>>()
+			var MapOfTransitions = new Dictionary<AbstractState, List<TransitionStateInfo>>()
 				{
 					{
-						ListOfStates[0], new List<ConditionTransitionState>()
+						ListOfStates[0], new List<TransitionStateInfo>()
 						{
-							new ConditionTransitionState(ListOfStates[1], null, null, null, new List<KeyValuePair<string, bool>>()
+							new TransitionStateInfo(ListOfStates[1], null, null, null, new List<KeyValuePair<string, bool>>()
 							{
 								new KeyValuePair<string, bool>( "InMotion", false )
 							})
 						}
 					},
 					{
-						ListOfStates[1], new List<ConditionTransitionState>()
+						ListOfStates[1], new List<TransitionStateInfo>()
 						{
-							new ConditionTransitionState(ListOfStates[0], null, null, null, null)
+							new TransitionStateInfo(ListOfStates[0], null, null, null, null)
 						}
 					}
 				};
@@ -70,17 +70,17 @@ namespace FSM
 					//new ReloadState(0f),
 				};
 
-			var MapOfTransitions = new Dictionary<AbstractState, List<ConditionTransitionState>>()
+			var MapOfTransitions = new Dictionary<AbstractState, List<TransitionStateInfo>>()
 				{
 					{
-						ListOfStates[0], new List<ConditionTransitionState>()
+						ListOfStates[0], new List<TransitionStateInfo>()
 						{
-							new ConditionTransitionState(ListOfStates[1], null, null, null, new List<KeyValuePair<string, bool>>()
+							new TransitionStateInfo(ListOfStates[1], null, null, null, new List<KeyValuePair<string, bool>>()
 							{
 								new KeyValuePair<string, bool>( "InMotion", false ),
 								new KeyValuePair<string, bool>( "OutOfAmmos", false )
 							}),
-							new ConditionTransitionState(ListOfStates[2], null, null, null, new List<KeyValuePair<string, bool>>()
+							new TransitionStateInfo(ListOfStates[2], null, null, null, new List<KeyValuePair<string, bool>>()
 							{
 								new KeyValuePair<string, bool>( "InMotion", false ),
 								new KeyValuePair<string, bool>( "OutOfAmmos", true )
@@ -88,18 +88,18 @@ namespace FSM
 						}
 					},
 					{
-						ListOfStates[1], new List<ConditionTransitionState>()
+						ListOfStates[1], new List<TransitionStateInfo>()
 						{
-							new ConditionTransitionState(ListOfStates[0], null, null, null,  new List<KeyValuePair<string, bool>>()
+							new TransitionStateInfo(ListOfStates[0], null, null, null,  new List<KeyValuePair<string, bool>>()
 							{
 								new KeyValuePair<string, bool>( "OutOfAmmos", true )
 							}),
 						}
 					},
 					{
-						ListOfStates[2], new List<ConditionTransitionState>()
+						ListOfStates[2], new List<TransitionStateInfo>()
 						{
-							new ConditionTransitionState(ListOfStates[0], null, null, null,  new List<KeyValuePair<string, bool>>()
+							new TransitionStateInfo(ListOfStates[0], null, null, null,  new List<KeyValuePair<string, bool>>()
 							{
 								new KeyValuePair<string, bool>( "OutOfAmmos", false )
 							}),
@@ -109,6 +109,6 @@ namespace FSM
 			var CurrentState = ListOfStates[0];
 
 			return new FSM(ListOfStates, MapOfTransitions, CurrentState);
-		}
+		}*/
 	}
 }

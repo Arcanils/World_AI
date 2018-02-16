@@ -6,7 +6,7 @@ namespace FSM
 {
 	public class FSM
 	{
-		public Dictionary<AbstractState, List<ConditionTransitionState>> MapOfTransitions;
+		public Dictionary<AbstractState, List<TransitionStateInfo>> MapOfTransitions;
 		public List<DefaultState> ListOfStates;
 
 
@@ -15,7 +15,7 @@ namespace FSM
 		private PawnComponent _target;
 		private LocalSpace _space;
 
-		public FSM(List<DefaultState> ListOfStates, Dictionary<AbstractState, List<ConditionTransitionState>> MapOfTransitions, AbstractState CurrentState)
+		public FSM(List<DefaultState> ListOfStates, Dictionary<AbstractState, List<TransitionStateInfo>> MapOfTransitions, AbstractState CurrentState)
 		{
 			this.ListOfStates = ListOfStates;
 			this.MapOfTransitions = MapOfTransitions;
@@ -59,16 +59,16 @@ namespace FSM
 				}
 			}
 		}
-		private AbstractState GetNextState(List<ConditionTransitionState> TransitionsToTest)
+		private AbstractState GetNextState(List<TransitionStateInfo> TransitionsToTest)
 		{
 			if (!CurrentState.IsMinimalTimeFinish)
 				return null;
 
 			for (int i = 0, iLength = TransitionsToTest.Count; i < iLength; i++)
 			{
-				if (_space.MatchThisVars(TransitionsToTest[i]))
+				if (_space.MatchThisVars(TransitionsToTest[i].Conditions))
 				{
-					return TransitionsToTest[i].ToState;
+					return TransitionsToTest[i].TargetState;
 				}
 			}
 

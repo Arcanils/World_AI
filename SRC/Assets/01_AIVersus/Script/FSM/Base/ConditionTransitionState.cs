@@ -4,22 +4,104 @@ using UnityEngine;
 
 namespace FSM
 {
-	public class ConditionTransitionState
+	public class TransitionStateInfo
 	{
-		public AbstractState ToState;
-		public List<KeyValuePair<string, string>> StringConditions;
-		public List<KeyValuePair<string, float>> FloatConditions;
-		public List<KeyValuePair<string, int>> IntConditions;
-		public List<KeyValuePair<string, bool>> BoolConditions;
+		public AbstractState TargetState;
+		public TransitionConditions Conditions;
 
-		public ConditionTransitionState(AbstractState ToState, List<KeyValuePair<string, string>> StringConditions, List<KeyValuePair<string, float>> FloatConditions,
-			List<KeyValuePair<string, int>> IntConditions, List<KeyValuePair<string, bool>> BoolConditions)
+		public TransitionStateInfo(AbstractState TargetState, TransitionConditions Conditions = null)
 		{
-			this.ToState = ToState;
-			this.StringConditions = StringConditions ?? new List<KeyValuePair<string, string>>();
-			this.FloatConditions = FloatConditions ?? new List<KeyValuePair<string, float>>();
-			this.IntConditions = IntConditions ?? new List<KeyValuePair<string, int>>();
-			this.BoolConditions = BoolConditions ?? new List<KeyValuePair<string, bool>>();
+			this.TargetState = TargetState;
+			this.Conditions = Conditions ?? new TransitionConditions();
+		}
+}
+
+	public class TransitionConditions
+	{
+		public enum ETypeCondition
+		{
+			NONE,
+			FORCE_TRANSITION,
+			MANDATORY,
+		}
+
+		public List<Condition<bool>> BoolConditions;
+		public List<Condition<float>> FloatConditions;
+		public List<Condition<int>> IntConditions;
+		public List<Condition<string>> StringConditions;
+
+		public ETypeCondition EndStateMode;
+		public ETypeCondition AfterDurationFinish;
+
+		public TransitionConditions(
+			List<Condition<bool>> BoolConditions = null,
+			List<Condition<float>> FloatConditions = null,
+			List<Condition<int>> IntConditions = null,
+			List<Condition<string>> StringConditions = null,
+			ETypeCondition EndStateMode = ETypeCondition.NONE,
+			ETypeCondition AfterDurationFinish = ETypeCondition.MANDATORY)
+		{
+			this.BoolConditions = BoolConditions ?? new List<Condition<bool>>();
+			this.FloatConditions = FloatConditions ?? new List<Condition<float>>();
+			this.IntConditions = IntConditions ?? new List<Condition<int>>();
+			this.StringConditions = StringConditions ?? new List<Condition<string>>();
+			this.EndStateMode = EndStateMode;
+			this.AfterDurationFinish = AfterDurationFinish;
+		}
+	}
+
+	public struct Condition<T> where T : System.IComparable
+	{
+		public enum EConditionOperator
+		{
+			EQUAL,
+			DIFFERENT,
+			SUPERIOR,
+			SUPERIOR_OR_EQUAL,
+			INFERIOR,
+			INFERIOR_OR_EQUAL,
+		}
+		public string Key;
+		public T Value;
+		public EConditionOperator Operator;
+
+
+		public Condition(string Key, T Value, EConditionOperator Operator)
+		{
+			this.Key = Key;
+			this.Value = Value;
+			this.Operator = Operator;
+		}
+
+		public bool IsValide(T DataToCompare)
+		{
+			bool result;
+			switch(Operator)
+			{
+				case EConditionOperator.EQUAL:
+					result = Value.Equals(DataToCompare);
+					break;
+				case EConditionOperator.DIFFERENT:
+					result = !Value.Equals(DataToCompare);
+					break;
+				case EConditionOperator.SUPERIOR:
+					result = Value.CompareTo(DataToCompare) < 0;
+					break;
+				case EConditionOperator.SUPERIOR_OR_EQUAL:
+					result = Value.CompareTo(DataToCompare) <= 0;
+					break;
+				case EConditionOperator.INFERIOR:
+					result = Value.CompareTo(DataToCompare) > 0;
+					break;
+				case EConditionOperator.INFERIOR_OR_EQUAL:
+					result = Value.CompareTo(DataToCompare) >= 0;
+					break;
+				default:
+					result = false;
+					break;
+			}
+
+			return result;
 		}
 	}
 }
