@@ -7,23 +7,18 @@ public class PlayerController : MonoBehaviour
 	public float Speed;
 	private PawnComponent _pawn;
 
+	public void Awake()
+	{
+		_pawn = GetComponent<PawnComponent>();
+	}
+
 	public void Update()
 	{
-		Vector3 DirectionMove = new Vector3(Input.GetAxis("horizontal"), 0f);
+		Vector3 DirectionMove = new Vector3(Input.GetAxis("P1_MoveX"), 0f);
 
-		if (DirectionMove == Vector3.zero)
-		{
-			if (Input.GetButtonDown("Fire"))
-				_pawn.Shoot(Vector3.up);
-			else if (Input.GetButton("Reload"))
-			{
-				//_pawn.StartReload();
-			}
-		}
-		else
-		{
-			_pawn.Move(DirectionMove * Speed * Time.deltaTime);
-		}
-
+		_pawn.MoveInput(DirectionMove);
+		_pawn.ShootInput(Input.GetButton("P1_Fire"));
+		_pawn.ShieldInput(Input.GetButton("P1_Shield"));
+		_pawn.ReloadInput(Input.GetButton("P1_Reload"));
 	}
 }

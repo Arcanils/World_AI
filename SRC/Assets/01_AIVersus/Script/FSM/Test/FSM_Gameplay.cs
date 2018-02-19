@@ -9,8 +9,8 @@ namespace FSM
 		public static void CreateFSMGameplay(out FSM Reload, out FSM Move, out FSM Shoot)
 		{
 			Reload = CreateFSMReload();
-			Move = CreateFSMReload(); //CreateFSMMovement();
-			Shoot = CreateFSMReload(); //CreateFSMShoot();
+			Move = CreateFSMMovement(); //CreateFSMMovement();
+			Shoot = CreateFSMShoot(); //CreateFSMShoot();
 		}
 
 
@@ -32,7 +32,7 @@ namespace FSM
 								{
 									new Condition<bool>("InMotion", false, Condition<bool>.EConditionOperator.EQUAL),
 									new Condition<bool>("IsShooting", false, Condition<bool>.EConditionOperator.EQUAL),
-									new Condition<bool>("InputReload", false, Condition<bool>.EConditionOperator.EQUAL),
+									new Condition<bool>("InputReload", true, Condition<bool>.EConditionOperator.EQUAL),
 								}
 							)),
 						}
@@ -65,13 +65,13 @@ namespace FSM
 
 			return new FSM(ListOfStates, MapOfTransitions, CurrentState);
 		}
-		/*
+		
 		public static FSM CreateFSMMovement()
 		{
 			var ListOfStates = new List<DefaultState>()
 				{
 					new DefaultState(0f),
-					new RunState(Vector2.one),
+					new RunState(0f),
 				};
 
 			var MapOfTransitions = new Dictionary<AbstractState, List<TransitionStateInfo>>()
@@ -79,23 +79,25 @@ namespace FSM
 					{
 						ListOfStates[0], new List<TransitionStateInfo>()
 						{
-							new TransitionStateInfo(ListOfStates[1], null, new List<KeyValuePair<string, float>>()
-							{
-								new KeyValuePair<string, float>( "InputMoveX", 1f),
-							}, null, null),
-							new TransitionStateInfo(ListOfStates[1], null, new List<KeyValuePair<string, float>>()
-							{
-								new KeyValuePair<string, float>( "InputMoveX", -1f),
-							}, null, null)
+							new TransitionStateInfo(ListOfStates[1],  new TransitionConditions(
+								null,
+								new List<Condition<float>>()
+								{
+									new Condition<float>("InputMoveX", 0f, Condition<float>.EConditionOperator.DIFFERENT),
+								}
+							)),
 						}
 					},
 					{
 						ListOfStates[1], new List<TransitionStateInfo>()
 						{
-							new TransitionStateInfo(ListOfStates[1], null, new List<KeyValuePair<string, float>>()
-							{
-								new KeyValuePair<string, float>( "InputMoveX", 0f),
-							}, null, null),
+							new TransitionStateInfo(ListOfStates[0],  new TransitionConditions(
+								null,
+								new List<Condition<float>>()
+								{
+									new Condition<float>("InputMoveX", 0f, Condition<float>.EConditionOperator.EQUAL),
+								}
+							)),
 						}
 					}
 				};
@@ -117,25 +119,31 @@ namespace FSM
 					{
 						ListOfStates[0], new List<TransitionStateInfo>()
 						{
-							new TransitionStateInfo(ListOfStates[1], null, null, null, new List<KeyValuePair<string, bool>>()
-							{
-								new KeyValuePair<string, bool>( "InputShoot", true ),
-							}),
+							new TransitionStateInfo(ListOfStates[1],  new TransitionConditions(
+								new List<Condition<bool>>()
+								{
+									new Condition<bool>("InputShoot", true, Condition<bool>.EConditionOperator.EQUAL),
+								}
+							)),
 						}
 					},
 					{
-						ListOfStates[0], new List<TransitionStateInfo>()
+						ListOfStates[1], new List<TransitionStateInfo>()
 						{
-							new TransitionStateInfo(ListOfStates[1], null, null, null, new List<KeyValuePair<string, bool>>()
-							{
-								new KeyValuePair<string, bool>( "Shooting", false),
-								new KeyValuePair<string, bool>( "InputShoot", false),
-							}),
-							new TransitionStateInfo(ListOfStates[1], null, null, null, new List<KeyValuePair<string, bool>>()
-							{
-								new KeyValuePair<string, bool>( "OutOfAmmos", true),
-								new KeyValuePair<string, bool>( "Shooting", false),
-							}),
+							new TransitionStateInfo(ListOfStates[0],  new TransitionConditions(
+								new List<Condition<bool>>()
+								{
+									new Condition<bool>("IsShooting", false, Condition<bool>.EConditionOperator.EQUAL),
+									new Condition<bool>("InputShoot", false, Condition<bool>.EConditionOperator.EQUAL),
+								}
+							)),
+							new TransitionStateInfo(ListOfStates[0],  new TransitionConditions(
+								new List<Condition<bool>>()
+								{
+									new Condition<bool>("OutOfAmmos", true, Condition<bool>.EConditionOperator.EQUAL),
+									new Condition<bool>("IsShooting", false, Condition<bool>.EConditionOperator.EQUAL),
+								}
+							))
 						}
 					}
 				};
@@ -143,6 +151,5 @@ namespace FSM
 
 			return new FSM(ListOfStates, MapOfTransitions, CurrentState);
 		}
-		*/
 	}
 }

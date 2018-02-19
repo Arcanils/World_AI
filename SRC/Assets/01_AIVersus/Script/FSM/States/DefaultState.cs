@@ -29,7 +29,7 @@ namespace FSM
 			_target = Entity;
 			_currentTimeLeft = DurationToWait;
 			IsMinimalTimeFinish = false;
-			Debug.Log("Entering State : " + GetType());
+			//Debug.Log("Entering State : " + GetType());
 		}
 
 		public override void Tick(float Deltatime)

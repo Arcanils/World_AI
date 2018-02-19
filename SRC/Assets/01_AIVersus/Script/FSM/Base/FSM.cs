@@ -22,26 +22,36 @@ namespace FSM
 			this.CurrentState = CurrentState;
 		}
 
-		public static void LinksAndInit(PawnComponent TargetFSM, params FSM[] FSMs)
+		public static void LinksFSMToThisSpace(LocalSpace Space, params FSM[] FSMs)
 		{
-			LocalSpace space = new LocalSpace();
 			for (int i = 0; i < FSMs.Length; i++)
 			{
-				FSMs[i].Init(TargetFSM, space);
+				FSMs[i].LinkToThisSpace(Space);
 			}
 		}
 
-		public void Init(PawnComponent Target, LocalSpace NewSpace)
+		public static void InitFSMs(PawnComponent TargetFSM, params FSM[] FSMs)
+		{
+			for (int i = 0; i < FSMs.Length; i++)
+			{
+				FSMs[i].Init(TargetFSM);
+			}
+		}
+
+		public void Init(PawnComponent Target)
 		{
 			_target = Target;
+			CurrentState.EnterState(Target);
+		}
+
+		public void LinkToThisSpace(LocalSpace NewSpace)
+		{
 			_space = NewSpace ?? new LocalSpace();
 			for (int i = ListOfStates.Count - 1; i >= 0; --i)
 			{
 				ListOfStates[i].Init(_space);
 			}
-			CurrentState.EnterState(Target);
 		}
-
 
 		public void Tick(float Deltatime)
 		{

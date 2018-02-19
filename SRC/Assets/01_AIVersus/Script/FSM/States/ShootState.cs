@@ -8,10 +8,11 @@ namespace FSM
 	{
 		private float _durationBeforeShoot;
 		private Vector3 _direction;
+		private float _fireRate;
 
 		public ShootState(float FireRate, float DurationToWait) : base(DurationToWait)
 		{
-
+			_fireRate = FireRate;
 		}
 		public override void Init(LocalSpace Space)
 		{
@@ -41,6 +42,7 @@ namespace FSM
 				if (_target.NAmmoLeft > 0)
 				{
 					_target.Shoot(_direction);
+					_durationBeforeShoot = _fireRate;
 				}
 				else
 				{
